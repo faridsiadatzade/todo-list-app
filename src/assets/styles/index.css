@@ -61,9 +61,10 @@ input::-webkit-inner-spin-button {
 }
 
 input::placeholder {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  color: var(--primary);
+  /* color: var(--primary); */
+  font-family: "Lexend";
 }
 
 /* Firefox */
@@ -73,6 +74,7 @@ input[type="number"] {
 
 input {
   color: var(--primary);
+  font-family: "Lexend";
 }
 
 ::-webkit-scrollbar {

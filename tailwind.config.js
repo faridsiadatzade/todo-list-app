@@ -36,8 +36,8 @@ export default {
         green: "var(--green)",
         success: "var(--success)",
       },
-      backgroundImage: {
-        "home-bg": "url('./src/assets/images/home-bg.jpg')",
+      fontFamily: {
+        roboto: ["Lexend", "Lexend"],
       },
     },
   },

@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 
 const Home = () => {
   const [projectName, setProjectName] = useState("");
+  const navigate = useNavigate();
 
   const handleCreateProject = () => {
     if (!projectName.trim()) return;
-    alert(`Project Created: ${projectName}`);
+    navigate(`/project/${projectName}`);
     setProjectName("");
   };
 

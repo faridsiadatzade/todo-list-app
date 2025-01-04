@@ -31,12 +31,17 @@ const ProjectPage = () => {
     );
   };
 
+  const handleDeleteTask = (taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  };
+
   return (
     <div>
       <h1>Project: {id?.split("_")[0]}</h1>
       <Input
         type="text"
         placeholder="Enter Task Title"
+        value={taskTitle}
         onChange={(e) => setTaskTitle(e.target.value)}
       />
       <Button onClick={handleAddTask} label="Add Task" />
@@ -51,6 +56,10 @@ const ProjectPage = () => {
                 <Button
                   label="Move to To-Do"
                   onClick={() => handleChangeStatus(task.id, "todo")}
+                />
+                <Button
+                  label="Delete"
+                  onClick={() => handleDeleteTask(task.id)}
                 />
               </li>
             ))}
@@ -72,6 +81,10 @@ const ProjectPage = () => {
                   label="Move to Backlog"
                   onClick={() => handleChangeStatus(task.id, "backlog")}
                 />
+                <Button
+                  label="Delete"
+                  onClick={() => handleDeleteTask(task.id)}
+                />
               </li>
             ))}
         </ul>
@@ -87,6 +100,10 @@ const ProjectPage = () => {
                 <Button
                   label="Move to To-Do"
                   onClick={() => handleChangeStatus(task.id, "todo")}
+                />
+                <Button
+                  label="Delete"
+                  onClick={() => handleDeleteTask(task.id)}
                 />
               </li>
             ))}

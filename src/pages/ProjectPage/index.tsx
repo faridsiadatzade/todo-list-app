@@ -11,7 +11,7 @@ const ProjectPage = () => {
 
   return (
     <div>
-      <h1>Project: {id}</h1>
+      <h1>Project: {id?.split("_")[0]}</h1>
       <div>
         <h2>Backlog</h2>
         <ul>

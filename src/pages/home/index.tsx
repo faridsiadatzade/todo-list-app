@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { v4 as uuidv4 } from "uuid";
 
 const Home = () => {
   const [projectName, setProjectName] = useState("");
@@ -9,7 +10,8 @@ const Home = () => {
 
   const handleCreateProject = () => {
     if (!projectName.trim()) return;
-    navigate(`/project/${projectName}`);
+    const projectId = uuidv4();
+    navigate(`/project/${projectName}_${projectId}`);
     setProjectName("");
   };
 

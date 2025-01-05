@@ -5,10 +5,10 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: #f2f2f2;
+    --foreground: #5e5860;
     --primary: #370525;
     --primary-foreground: #fff;
-    --secondary: #f0f0f0;
+    --secondary: #37052569;
     --secondary-foreground: 0 0% 9%;
     --border: 10px;
     --input: #dddddd;
@@ -48,10 +48,14 @@
 
 /* Chrome, Safari, Edge, Opera */
 body {
-  background: url("../images/home-bg.jpg") no-repeat;
+  background-image: url("../images/home-bg.jpg");
+  background-repeat: no-repeat;
+  background-color: #efd2cc;
   height: 100vh;
   background-position: center;
+  background-size: 100% 100%;
   font-family: "Lexend";
+  color: var(--input);
 }
 
 input::-webkit-outer-spin-button,
@@ -60,7 +64,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input::placeholder {
+input::placeholder,
+textarea,
+input,
+textarea::placeholder {
   font-size: 15px;
   font-weight: 400;
   /* color: var(--primary); */
@@ -72,7 +79,8 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input {
+input,
+textarea {
   color: var(--primary);
   font-family: "Lexend";
 }

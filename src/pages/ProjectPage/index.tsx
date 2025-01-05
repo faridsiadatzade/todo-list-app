@@ -1,113 +1,108 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Modal from "../../components/Modal";
+import AddTaskForm from "./AddTaskForm";
+import TaskList from "./TaskList";
 
 const ProjectPage = () => {
-  const [taskTitle, setTaskTitle] = useState("");
   const { id } = useParams();
   const [tasks, setTasks] = useState<
-    { id: string; title: string; status: string }[]
+    { id: string; title: string; description: string; status: string }[]
   >([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentTask, setCurrentTask] = useState<{
+    id: string;
+    title: string;
+    description: string;
+  } | null>(null);
 
-  const handleAddTask = () => {
-    if (!taskTitle.trim()) return;
+  const handleAddTask = (title: string, description: string) => {
     const newTask = {
       id: Math.random().toString(36).substring(7),
-      title: taskTitle,
+      title,
+      description,
       status: "backlog",
     };
-    setTasks((prevTasks) => (prevTasks ? [...prevTasks, newTask] : [newTask]));
-    setTaskTitle("");
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setIsModalOpen(false);
   };
 
-  const handleChangeStatus = (taskId: string, newStatus: string) => {
+  const handleEditTask = (id: string, title: string, description: string) => {
     setTasks((prevTasks) =>
-      prevTasks
-        ? prevTasks.map((task) =>
-            task.id === taskId ? { ...task, status: newStatus } : task
-          )
-        : []
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, title, description } : task
+      )
     );
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setCurrentTask(null);
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+  const handleDeleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const openEditModal = (task: {
+    id: string;
+    title: string;
+    description: string;
+  }) => {
+    setIsEditing(true);
+    setCurrentTask(task);
+    setIsModalOpen(true);
   };
 
   return (
-    <div>
-      <h1>Project: {id?.split("_")[0]}</h1>
-      <Input
-        type="text"
-        placeholder="Enter Task Title"
-        value={taskTitle}
-        onChange={(e) => setTaskTitle(e.target.value)}
-      />
-      <Button onClick={handleAddTask} label="Add Task" />
-      <div>
-        <h2>Backlog</h2>
-        <ul>
-          {tasks
-            .filter((task) => task.status === "backlog")
-            .map((task) => (
-              <li key={task.id}>
-                {task.title}
-                <Button
-                  label="Move to To-Do"
-                  onClick={() => handleChangeStatus(task.id, "todo")}
-                />
-                <Button
-                  label="Delete"
-                  onClick={() => handleDeleteTask(task.id)}
-                />
-              </li>
-            ))}
-        </ul>
+    <div className="flex flex-col items-center align-item-center text-3xl py-8 lg:w-2/3 m-auto">
+      <h1 className="font-bold my-5 bg-gradient-to-l from-primary text-white rounded-[50px] p-2">
+        Project: {id?.split("_")[0]}
+      </h1>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={isEditing ? "Edit Task" : "Add New Task"}
+      >
+        <AddTaskForm
+          onAddTask={isEditing ? undefined : handleAddTask}
+          onEditTask={isEditing ? handleEditTask : undefined}
+          task={currentTask}
+        />
+      </Modal>
+
+      <div className="flex justify-between w-full gap-2">
+        <TaskList
+          tasks={tasks}
+          status="backlog"
+          onEdit={openEditModal}
+          onDelete={handleDeleteTask}
+        />
+        <TaskList
+          tasks={tasks}
+          status="todo"
+          onEdit={openEditModal}
+          onDelete={handleDeleteTask}
+        />
+        <TaskList
+          tasks={tasks}
+          status="done"
+          onEdit={openEditModal}
+          onDelete={handleDeleteTask}
+        />
       </div>
-      <div>
-        <h2>To-Do</h2>
-        <ul>
-          {tasks
-            .filter((task) => task.status === "todo")
-            .map((task) => (
-              <li key={task.id}>
-                {task.title}
-                <Button
-                  label="Move to Done"
-                  onClick={() => handleChangeStatus(task.id, "done")}
-                />
-                <Button
-                  label="Move to Backlog"
-                  onClick={() => handleChangeStatus(task.id, "backlog")}
-                />
-                <Button
-                  label="Delete"
-                  onClick={() => handleDeleteTask(task.id)}
-                />
-              </li>
-            ))}
-        </ul>
-      </div>
-      <div>
-        <h2>Done</h2>
-        <ul>
-          {tasks
-            .filter((task) => task.status === "done")
-            .map((task) => (
-              <li key={task.id}>
-                {task.title}
-                <Button
-                  label="Move to To-Do"
-                  onClick={() => handleChangeStatus(task.id, "todo")}
-                />
-                <Button
-                  label="Delete"
-                  onClick={() => handleDeleteTask(task.id)}
-                />
-              </li>
-            ))}
-        </ul>
+
+      <div className={`bottom-[20%] ${!isModalOpen && "fixed"}`}>
+        <Button
+          onClick={() => {
+            setIsModalOpen(true);
+            setIsEditing(false);
+            setCurrentTask(null);
+          }}
+          label="Add Task"
+          className="bg-primary px-4 py-2"
+        />
       </div>
     </div>
   );

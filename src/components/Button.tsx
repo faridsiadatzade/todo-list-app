@@ -12,7 +12,7 @@ interface ButtonProps {
 const Button: FC<ButtonProps> = ({ label, disabled, className, onClick }) => {
   return (
     <button
-      className={`${className} w-full rounded-md text-base font-bold disabled:bg-gray-300`}
+      className={`${className} w-full rounded-md text-base font-bold disabled:bg-gray-300 hover:text-white`}
       disabled={disabled}
       onClick={onClick}
     >

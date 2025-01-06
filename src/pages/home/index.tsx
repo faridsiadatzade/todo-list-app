@@ -5,25 +5,25 @@ import Input from "../../components/Input";
 import { v4 as uuidv4 } from "uuid";
 
 const Home = () => {
-  const [projectName, setProjectName] = useState("");
+  const [projectName, setProjectName] = useState<string>("");
   const navigate = useNavigate();
 
   const handleCreateProject = () => {
-    if (!projectName.trim()) return;
+    const trimmedName = projectName.trim();
+    if (!trimmedName) return alert("Please enter a valid project name.");
+
     const projectId = uuidv4();
-    navigate(`/project/${projectName}_${projectId}`);
+    navigate(`/project/${trimmedName}_${projectId}`);
     setProjectName("");
   };
 
-  const handleKeyPress = (e: any) => {
-    if (e.key === "Enter") {
-      handleCreateProject();
-    }
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleCreateProject();
   };
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center m-auto h-[100vh]">
+      <div className="flex flex-col items-center justify-center m-auto min-h-screen">
         <h1 className="font-bold text-center text-4xl my-20">
           SIMPLE TODO LIST
         </h1>

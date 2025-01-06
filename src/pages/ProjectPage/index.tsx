@@ -1,28 +1,25 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import AddTaskForm from "./AddTaskForm";
 import TaskList from "./TaskList";
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+}
+
+const statuses = ["backlog", "todo", "done"];
 
 const ProjectPage = () => {
   const { id } = useParams();
-  const [tasks, setTasks] = useState<
-    { id: string; title: string; description: string; status: string }[]
-  >([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentTask, setCurrentTask] = useState<{
-    id: string;
-    title: string;
-    description: string;
-  } | null>(null);
+  const [currentTask, setCurrentTask] = useState<Partial<Task> | null>(null);
 
   const handleAddTask = (title: string, description: string) => {
     const newTask = {
@@ -32,7 +29,7 @@ const ProjectPage = () => {
       status: "backlog",
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
-    setIsModalOpen(false);
+    closeModal();
   };
 
   const handleEditTask = (id: string, title: string, description: string) => {
@@ -41,23 +38,23 @@ const ProjectPage = () => {
         task.id === id ? { ...task, title, description } : task
       )
     );
-    setIsModalOpen(false);
-    setIsEditing(false);
-    setCurrentTask(null);
+    closeModal();
   };
 
   const handleDeleteTask = (id: string) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
-  const openEditModal = (task: {
-    id: string;
-    title: string;
-    description: string;
-  }) => {
+  const openEditModal = (task: Task) => {
     setIsEditing(true);
     setCurrentTask(task);
     setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setCurrentTask(null);
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -90,14 +87,14 @@ const ProjectPage = () => {
         title={isEditing ? "Edit Task" : "Add New Task"}
       >
         <AddTaskForm
-          onAddTask={isEditing ? undefined : handleAddTask}
+          onAddTask={!isEditing ? handleAddTask : undefined}
           onEditTask={isEditing ? handleEditTask : undefined}
           task={currentTask}
         />
       </Modal>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex justify-between w-full gap-2">
-          {["backlog", "todo", "done"].map((status) => (
+        <div className="grid grid-cols-3 w-full gap-2">
+          {statuses.map((status) => (
             <Droppable key={status} droppableId={status}>
               {(provided) => (
                 <div

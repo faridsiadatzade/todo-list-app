@@ -21,7 +21,7 @@ const TaskList: React.FC<TaskListProps> = ({
 }) => {
   return (
     <>
-      <h3 className="text-lg font-bold my-5 bg-gradient-to-l from-primary text-white rounded-[50px] text-center p-2 mx-auto mb-4 min-w-max max-w-[100px]">
+      <h3 className="text-lg font-bold my-5 bg-gradient-to-l from-primary text-white rounded-[50px] text-center p-2 mx-auto mb-4 min-w-max max-w-[100px] shadow-2xl">
         {status}
       </h3>
       <ul className="space-y-2">
@@ -32,7 +32,7 @@ const TaskList: React.FC<TaskListProps> = ({
               {(provided) => (
                 <li
                   key={task.id}
-                  className="w-full m-auto bg-gradient-to-r from-primary to-[#e5d4da] rounded-md p-4 border border-primary"
+                  className="w-full m-auto bg-gradient-to-r from-primary to-[#e5d4da] rounded-md p-4 border border-primary break-words whitespace-normal max-w-[300px] shadow-lg"
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}

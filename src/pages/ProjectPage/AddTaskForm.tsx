@@ -2,10 +2,16 @@ import { useState } from "react";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Textarea from "./../../components/Textarea";
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+}
 interface AddTaskFormProps {
   onAddTask?: (title: string, description: string) => void;
   onEditTask?: (id: string, title: string, description: string) => void;
-  task?: { id: string; title: string; description: string } | null;
+  task: Partial<Task> | null;
 }
 
 const AddTaskForm: React.FC<AddTaskFormProps> = ({
@@ -13,19 +19,15 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({
   onEditTask,
   task,
 }) => {
-  const [taskTitle, setTaskTitle] = useState(task?.title || "");
-  const [taskDescription, setTaskDescription] = useState(
+  const [taskTitle, setTaskTitle] = useState<string>(task?.title || "");
+  const [taskDescription, setTaskDescription] = useState<string>(
     task?.description || ""
   );
 
   const handleSubmit = () => {
     if (!taskTitle.trim()) return;
-    if (onAddTask) {
-      onAddTask(taskTitle, taskDescription);
-    }
-    if (onEditTask && task) {
-      onEditTask(task.id, taskTitle, taskDescription);
-    }
+    if (onAddTask) onAddTask(taskTitle, taskDescription);
+    if (onEditTask && task?.id) onEditTask(task.id, taskTitle, taskDescription);
   };
 
   return (

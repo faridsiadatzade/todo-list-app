@@ -1,13 +1,16 @@
 import React from "react";
-import { TaskProvider } from "./context/TaskContext";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/home";
+import ProjectPage from "./pages/ProjectPage";
 
 const App: React.FC = () => {
   return (
-    <TaskProvider>
-      <div>
-        <h1>To-Do List</h1>
-      </div>
-    </TaskProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/project/:id" element={<ProjectPage />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -22,25 +22,30 @@ const Home = () => {
   };
 
   return (
-    <div className="flex items-center justify-items-center h-[100vh]">
-      <section className="block m-auto lg:w-1/3 xl:w-1/4 bg-[#37052569] rounded-md py-8 px-6">
-        <h1 className="text-center text-2xl p-1 text- font-bold block bg-white rounded-md border-2 border-primary">
-          CREATE TODO LIST
+    <>
+      <div className="flex flex-col items-center justify-center m-auto h-[100vh]">
+        <h1 className="font-bold text-center text-4xl my-20">
+          SIMPLE TODO LIST
         </h1>
-        <Input
-          type="text"
-          placeholder="Enter Project Name"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-          onKeyPress={handleKeyPress}
-        />
-        <Button
-          onClick={handleCreateProject}
-          label="Submit"
-          className="bg-primary p-2 mt-3 text-white"
-        />
-      </section>
-    </div>
+        <section className="block m-auto lg:w-1/3 xl:w-1/4 bg-[#37052569] rounded-md py-8 px-6">
+          <h2 className="text-center text-2xl p-1 text-primary font-bold block bg-white rounded-md border-2 border-primary">
+            CREATE TODO LIST
+          </h2>
+          <Input
+            type="text"
+            placeholder="Enter Project Name"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          <Button
+            onClick={handleCreateProject}
+            label="Submit"
+            className="bg-primary p-2 mt-3 text-white"
+          />
+        </section>
+      </div>
+    </>
   );
 };
 

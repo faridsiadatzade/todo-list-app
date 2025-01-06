@@ -48,14 +48,15 @@
 
 /* Chrome, Safari, Edge, Opera */
 body {
-  background-image: url("../images/home-bg.jpg");
+  background-image: url("../images/home.jpeg");
   background-repeat: no-repeat;
-  background-color: #efd2cc;
+  background-color: #fff2f1;
   height: 100vh;
   background-position: center;
-  background-size: 100% 100%;
+  background-size: cover;
   font-family: "Lexend";
   color: var(--input);
+  margin: 0 15px;
 }
 
 input::-webkit-outer-spin-button,

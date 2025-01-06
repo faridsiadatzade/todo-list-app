@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import AddTaskForm from "./AddTaskForm";
@@ -54,11 +60,29 @@ const ProjectPage = () => {
     setIsModalOpen(true);
   };
 
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination, draggableId } = result;
+
+    if (!destination) return;
+
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    const updatedTasks = [...tasks];
+    const draggedTaskIndex = tasks.findIndex((task) => task.id === draggableId);
+    if (draggedTaskIndex === -1) return;
+
+    updatedTasks[draggedTaskIndex].status = destination.droppableId;
+    setTasks(updatedTasks);
+  };
+
   return (
     <div className="flex flex-col items-center align-item-center text-3xl py-8 lg:w-2/3 m-auto">
-      <h1 className="font-bold my-5 bg-gradient-to-l from-primary text-white rounded-[50px] p-2">
-        Project: {id?.split("_")[0]}
-      </h1>
+      <h1 className="font-bold my-9">Project: {id?.split("_")[0]}</h1>
 
       <Modal
         isOpen={isModalOpen}
@@ -71,27 +95,29 @@ const ProjectPage = () => {
           task={currentTask}
         />
       </Modal>
-
-      <div className="flex justify-between w-full gap-2">
-        <TaskList
-          tasks={tasks}
-          status="backlog"
-          onEdit={openEditModal}
-          onDelete={handleDeleteTask}
-        />
-        <TaskList
-          tasks={tasks}
-          status="todo"
-          onEdit={openEditModal}
-          onDelete={handleDeleteTask}
-        />
-        <TaskList
-          tasks={tasks}
-          status="done"
-          onEdit={openEditModal}
-          onDelete={handleDeleteTask}
-        />
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex justify-between w-full gap-2">
+          {["backlog", "todo", "done"].map((status) => (
+            <Droppable key={status} droppableId={status}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="my-4 w-full"
+                >
+                  <TaskList
+                    tasks={tasks}
+                    status={status}
+                    onEdit={openEditModal}
+                    onDelete={handleDeleteTask}
+                  />
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </div>
+      </DragDropContext>
 
       <div className={`bottom-[20%] ${!isModalOpen && "fixed"}`}>
         <Button

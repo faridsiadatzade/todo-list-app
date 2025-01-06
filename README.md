@@ -33,5 +33,5 @@ This project is a simple **To-Do List** application built using **React**, **Typ
    Clone the repository to your local machine:
 
    ```bash
-   git clone https://github.com/faridsiadatzade/todo-list-react-typescript-vite.git
+   git clone https://github.com/faridsiadatzade/todo-list-app.git
    ```
